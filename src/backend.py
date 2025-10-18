@@ -1,6 +1,7 @@
 """
 GIKI Chatbot Backend with MCP Integration
 Combines RAG pipeline with MCP tool calling
+FIXED: Enhanced student lookup with better error handling
 """
 
 import os
@@ -394,20 +395,109 @@ class AuthManager:
 
 
 class StudentDatabase:
-    """Mock student database"""
+    """Mock student database with enhanced error handling"""
     
     def __init__(self):
         self.students = self._load_mock_data()
+        logger.info(f"📚 Loaded {len(self.students)} students from database")
+        if self.students:
+            sample_ids = list(self.students.keys())[:5]
+            logger.info(f"📋 Sample student IDs: {', '.join(sample_ids)}")
     
     def _load_mock_data(self) -> Dict:
-        mock_file = 'data/mock_students.json'
-        if os.path.exists(mock_file):
-            with open(mock_file, 'r') as f:
-                return json.load(f)
-        return {}
+        """Load mock student data from multiple possible locations"""
+        possible_paths = [
+            'data/mock_students.json',
+            'data/data/mock_students.json',
+            '../data/mock_students.json',
+            './mock_students.json'
+        ]
+        
+        for mock_file in possible_paths:
+            if os.path.exists(mock_file):
+                logger.info(f"✓ Found student database: {mock_file}")
+                try:
+                    with open(mock_file, 'r') as f:
+                        data = json.load(f)
+                        if data:
+                            return data
+                except Exception as e:
+                    logger.error(f"✗ Error loading {mock_file}: {e}")
+        
+        # If no file found, create sample data
+        logger.warning("⚠️  No student database found, creating sample data...")
+        return self._create_and_save_sample_data()
+    
+    def _create_and_save_sample_data(self) -> Dict:
+        """Create sample student data and save it"""
+        departments = [
+            'Computer Science', 'Electrical Engineering', 'Mechanical Engineering',
+            'Chemical Engineering', 'Materials Engineering', 'Management Sciences'
+        ]
+        
+        first_names = ['Ahmed', 'Ali', 'Hassan', 'Bilal', 'Usman', 'Sara', 'Fatima', 'Ayesha', 'Zainab', 'Hira']
+        last_names = ['Khan', 'Ali', 'Ahmed', 'Shah', 'Malik', 'Hussain', 'Raza', 'Iqbal']
+        
+        import random
+        sample_data = {}
+        
+        for i in range(50):
+            year = random.choice([2021, 2022, 2023, 2024])
+            num = 100 + i
+            student_id = f"{year}{num}"
+            
+            sample_data[student_id] = {
+                'name': f"{random.choice(first_names)} {random.choice(last_names)}",
+                'department': random.choice(departments),
+                'semester': random.randint(1, 8),
+                'gpa': round(random.uniform(2.5, 4.0), 2),
+                'attendance': round(random.uniform(75.0, 98.0), 1),
+                'email': f'{student_id}@giki.edu.pk',
+                'status': 'Active'
+            }
+        
+        # Save to file
+        os.makedirs('data', exist_ok=True)
+        output_file = 'data/mock_students.json'
+        
+        try:
+            with open(output_file, 'w') as f:
+                json.dump(sample_data, f, indent=2)
+            logger.info(f"✓ Created sample student database: {output_file}")
+        except Exception as e:
+            logger.error(f"✗ Could not save sample data: {e}")
+        
+        return sample_data
     
     def get_student_info(self, student_id: str) -> Optional[Dict]:
-        return self.students.get(student_id)
+        """Get student information with logging"""
+        logger.info(f"🔍 Searching for student ID: {student_id}")
+        student = self.students.get(student_id)
+        
+        if student:
+            logger.info(f"✓ Found student: {student['name']} ({student['department']})")
+        else:
+            logger.warning(f"✗ Student {student_id} not found")
+            logger.info(f"Available IDs: {', '.join(list(self.students.keys())[:10])}")
+        
+        return student
+    
+    def list_all_students(self) -> List[str]:
+        """Get list of all student IDs"""
+        return list(self.students.keys())
+    
+    def search_students(self, query: str) -> List[Dict]:
+        """Search students by name or ID"""
+        query_lower = query.lower()
+        results = []
+        
+        for student_id, info in self.students.items():
+            if (query_lower in student_id.lower() or 
+                query_lower in info['name'].lower() or
+                query_lower in info['department'].lower()):
+                results.append({'id': student_id, **info})
+        
+        return results
 
 
 # Initialize components
@@ -430,7 +520,8 @@ def health_check():
         'timestamp': datetime.utcnow().isoformat(),
         'pinecone': 'connected' if rag_pipeline.index else 'disconnected',
         'llm': 'available' if rag_pipeline.llm_client else 'unavailable',
-        'mcp_tools': len(mcp_server.list_tools())
+        'mcp_tools': len(mcp_server.list_tools()),
+        'student_database': len(student_db.students)
     }
     return jsonify(status)
 
@@ -442,9 +533,23 @@ def list_mcp_tools():
     return jsonify({'tools': tools, 'count': len(tools)})
 
 
+@app.route('/api/students/list', methods=['GET'])
+def list_students():
+    """List all student IDs (admin only)"""
+    token = request.headers.get('Authorization', '').replace('Bearer ', '')
+    if not auth_manager.verify_token(token):
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    student_ids = student_db.list_all_students()
+    return jsonify({
+        'student_ids': student_ids,
+        'count': len(student_ids)
+    })
+
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    """Main chat endpoint with MCP integration"""
+    """Main chat endpoint with MCP integration and enhanced student lookup"""
     data = request.json
     query = data.get('query', '')
     
@@ -455,45 +560,129 @@ def chat():
     token = request.headers.get('Authorization', '').replace('Bearer ', '')
     is_admin = auth_manager.verify_token(token) if token else False
     
-    # Handle admin student queries
+    # Handle admin student queries with ENHANCED DETECTION
     if is_admin:
         query_lower = query.lower()
-        if any(keyword in query_lower for keyword in ['student', 'attendance', 'gpa', 'grade', 'semester']):
-            student_id_match = re.search(r'\b\d{7}\b', query)
+        
+        # Check if it's a student-related query
+        student_keywords = ['student', 'attendance', 'gpa', 'cgpa', 'grade', 'semester', 'info', 'details', 'show', 'get']
+        is_student_query = any(keyword in query_lower for keyword in student_keywords)
+        
+        if is_student_query:
+            # Try multiple regex patterns to extract student ID
+            student_id = None
             
-            if student_id_match:
-                student_id = student_id_match.group()
+            # Pattern 1: Exact 7 digits (2022405)
+            match = re.search(r'\b(\d{7})\b', query)
+            if match:
+                student_id = match.group(1)
+            
+            # Pattern 2: Year + space/dash + 3 digits (2022 405, 2022-405)
+            if not student_id:
+                match = re.search(r'\b(20\d{2})[-\s]?(\d{3})\b', query)
+                if match:
+                    student_id = match.group(1) + match.group(2)
+            
+            # Pattern 3: Just "202" followed by something (202xyz -> search for similar)
+            if not student_id:
+                match = re.search(r'\b(20\d{2})\s*(\w{1,3})\b', query_lower)
+                if match:
+                    year_prefix = match.group(1)
+                    # Search for students starting with this year
+                    matching_students = [sid for sid in student_db.students.keys() if sid.startswith(year_prefix)]
+                    if matching_students:
+                        return jsonify({
+                            'response': f"""🔍 **Found {len(matching_students)} students from year {year_prefix}:**
+
+{chr(10).join([f"• **{sid}**: {student_db.students[sid]['name']} - {student_db.students[sid]['department']}" for sid in matching_students[:10]])}
+
+Please provide a complete 7-digit student ID.
+Example: "Show info for student {matching_students[0]}"
+""",
+                            'sources': [],
+                            'admin_query': True
+                        })
+            
+            if student_id:
+                logger.info(f"🔍 Admin query for student: {student_id}")
                 student_info = student_db.get_student_info(student_id)
                 
                 if student_info:
-                    response_text = f"""**🎓 Student Information**
+                    response_text = f"""✅ **Student Information Found**
 
-**Student ID:** {student_id}
-**Name:** {student_info['name']}
-**Department:** {student_info['department']}
-**Semester:** {student_info['semester']}
-**CGPA:** {student_info['gpa']}/4.0
-**Attendance:** {student_info['attendance']}%
-**Email:** {student_info.get('email', f'{student_id}@giki.edu.pk')}
-**Status:** {student_info.get('status', 'Active')}
+📋 **Basic Details:**
+• **Student ID:** {student_id}
+• **Name:** {student_info['name']}
+• **Email:** {student_info.get('email', f'{student_id}@giki.edu.pk')}
+
+🎓 **Academic Information:**
+• **Department:** {student_info['department']}
+• **Current Semester:** {student_info['semester']}
+• **CGPA:** {student_info['gpa']}/4.0
+
+📊 **Attendance & Status:**
+• **Overall Attendance:** {student_info['attendance']}%
+• **Status:** {student_info.get('status', 'Active')}
 
 ---
-*This information is confidential and only accessible to authorized administrators.*"""
+*This information is confidential and only accessible to authorized administrators.*
+*Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*"""
+                    
+                    return jsonify({
+                        'response': response_text,
+                        'sources': [],
+                        'admin_query': True,
+                        'student_data': student_info
+                    })
+                else:
+                    # Show available student IDs
+                    all_ids = student_db.list_all_students()
+                    sample_ids = all_ids[:10]
+                    
+                    response_text = f"""❌ **Student ID '{student_id}' not found in database**
+
+📊 **Database Stats:**
+• Total students: {len(all_ids)}
+• Sample student IDs:
+
+{chr(10).join([f"  • {sid}" for sid in sample_ids])}
+
+💡 **Try one of these queries:**
+• "Show student info for {sample_ids[0]}"
+• "Get details for student {sample_ids[1]}"
+• "What is the attendance of {sample_ids[2]}"
+
+To see all student IDs, visit: /api/students/list"""
                     
                     return jsonify({
                         'response': response_text,
                         'sources': [],
                         'admin_query': True
                     })
-                else:
-                    return jsonify({
-                        'response': f"❌ Student ID **{student_id}** not found in the database.\n\nPlease verify the student ID and try again.",
-                        'sources': [],
-                        'admin_query': True
-                    })
             else:
+                # No student ID found in query
+                sample_ids = list(student_db.students.keys())[:5]
+                
+                response_text = f"""⚠️ **Could not extract student ID from your query**
+
+To access student information, please provide a 7-digit student ID.
+
+📋 **Example queries:**
+• "Show student info for {sample_ids[0]}"
+• "Get details for student {sample_ids[1]}"
+• "What is the attendance of {sample_ids[2]}"
+• "Show info for {sample_ids[3]}"
+
+📊 **Available formats:**
+• "student 2022405"
+• "info for 2023101"
+• "2022-405"
+• "2022 405"
+
+Total students in database: {len(student_db.students)}"""
+                
                 return jsonify({
-                    'response': "To access student information, please provide a 7-digit student ID.\n\n**Example queries:**\n• Get info for student 2022405\n• Show attendance for 2023101\n• What is the GPA of student 2021234",
+                    'response': response_text,
                     'sources': [],
                     'admin_query': True
                 })
@@ -552,8 +741,10 @@ def login():
     
     if auth_manager.verify_credentials(username, password):
         token = auth_manager.generate_token(username)
+        logger.info(f"✓ Admin login successful: {username}")
         return jsonify({'token': token, 'username': username})
     
+    logger.warning(f"✗ Failed login attempt for: {username}")
     return jsonify({'error': 'Invalid credentials'}), 401
 
 
@@ -577,9 +768,14 @@ if __name__ == '__main__':
     print(f"✓ Pinecone: {'Connected' if rag_pipeline.index else 'Not Connected'}")
     print(f"✓ LLM: {'Available' if rag_pipeline.llm_client else 'Not Available'}")
     print(f"✓ MCP Tools: {len(mcp_server.list_tools())}")
+    print(f"✓ Student Database: {len(student_db.students)} students loaded")
     print("\n📋 Available MCP Tools:")
     for tool in mcp_server.list_tools():
         print(f"   • {tool['name']}: {tool['description']}")
+    print("\n🎓 Sample Student IDs:")
+    sample_ids = list(student_db.students.keys())[:5]
+    for sid in sample_ids:
+        print(f"   • {sid}: {student_db.students[sid]['name']}")
     print("="*60 + "\n")
     
     app.run(host='0.0.0.0', port=5005, debug=True)
