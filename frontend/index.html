@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIKI Smart Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .message-animation {
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .typing-indicator {
+            display: inline-flex;
+            gap: 4px;
+        }
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6b7280;
+            animation: typing 1.4s infinite;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">G</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800">GIKI Smart Assistant</h1>
+                    <p class="text-xs text-gray-500">Your AI-powered university guide</p>
+                </div>
+            </div>
+            <button id="adminBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm">
+                Admin Login
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Chat Container -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden" style="height: calc(100vh - 180px);">
+            <!-- Chat Messages -->
+            <div id="chatMessages" class="h-full overflow-y-auto p-6 space-y-4">
+                <!-- Welcome Message -->
+                <div class="flex gap-3 message-animation">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-white text-sm font-bold">G</span>
+                    </div>
+                    <div class="bg-gray-100 rounded-2xl rounded-tl-none p-4 max-w-xl">
+                        <p class="text-gray-800">👋 Welcome to GIKI Smart Assistant! I can help you with:</p>
+                        <ul class="mt-2 text-sm text-gray-700 space-y-1">
+                            <li>• Admissions information</li>
+                            <li>• Academic programs and departments</li>
+                            <li>• Campus life and societies</li>
+                            <li>• Events and announcements</li>
+                        </ul>
+                        <p class="mt-3 text-sm text-gray-600">How can I assist you today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="border-t border-gray-200 p-4">
+                <div class="flex gap-2">
+                    <input
+                        type="text"
+                        id="userInput"
+                        placeholder="Ask me anything about GIKI..."
+                        class="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <button
+                        id="sendBtn"
+                        class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition font-medium"
+                    >
+                        Send
+                    </button>
+                </div>
+                <div class="mt-2 flex flex-wrap gap-2">
+                    <button class="suggested-query px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm rounded-full transition">
+                        How do I apply?
+                    </button>
+                    <button class="suggested-query px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm rounded-full transition">
+                        What departments exist?
+                    </button>
+                    <button class="suggested-query px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm rounded-full transition">
+                        Tell me about societies
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="adminModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Admin Login</h2>
+            <input
+                type="text"
+                id="adminUsername"
+                placeholder="Username"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <input
+                type="password"
+                id="adminPassword"
+                placeholder="Password"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <div class="flex gap-3">
+                <button id="loginBtn" class="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium">
+                    Login
+                </button>
+                <button id="cancelLoginBtn" class="px-4 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-medium">
+                    Cancel
+                </button>
+            </div>
+            <p id="loginError" class="mt-3 text-red-600 text-sm hidden"></p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE_URL = 'http://localhost:5005/api';
+        let authToken = localStorage.getItem('giki_admin_token');
+        let conversationHistory = [];
+
+        // DOM Elements
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const adminBtn = document.getElementById('adminBtn');
+        const adminModal = document.getElementById('adminModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+        const adminUsername = document.getElementById('adminUsername');
+        const adminPassword = document.getElementById('adminPassword');
+        const loginError = document.getElementById('loginError');
+
+        // Initialize
+        if (authToken) {
+            verifyToken();
+        }
+
+        // Event Listeners
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        adminBtn.addEventListener('click', () => {
+            if (authToken) {
+                logout();
+            } else {
+                adminModal.classList.remove('hidden');
+            }
+        });
+
+        cancelLoginBtn.addEventListener('click', () => {
+            adminModal.classList.add('hidden');
+            loginError.classList.add('hidden');
+        });
+
+        loginBtn.addEventListener('click', handleLogin);
+
+        document.querySelectorAll('.suggested-query').forEach(btn => {
+            btn.addEventListener('click', () => {
+                userInput.value = btn.textContent;
+                sendMessage();
+            });
+        });
+
+        // Functions
+        async function sendMessage() {
+            const query = userInput.value.trim();
+            if (!query) return;
+
+            // Add user message
+            addMessage(query, 'user');
+            userInput.value = '';
+
+            // Show typing indicator
+            const typingId = addTypingIndicator();
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(authToken && { 'Authorization': `Bearer ${authToken}` })
+                    },
+                    body: JSON.stringify({
+                        query: query,
+                        history: conversationHistory.slice(-5)
+                    })
+                });
+
+                const data = await response.json();
+
+                // Remove typing indicator
+                removeTypingIndicator(typingId);
+
+                if (data.error) {
+                    addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                } else {
+                    addMessage(data.response, 'bot', data.sources);
+                    
+                    // Update conversation history
+                    conversationHistory.push(
+                        { role: 'user', content: query },
+                        { role: 'assistant', content: data.response }
+                    );
+                }
+            } catch (error) {
+                removeTypingIndicator(typingId);
+                addMessage('Connection error. Please check if the backend is running.', 'bot');
+                console.error('Error:', error);
+            }
+        }
+
+        function addMessage(text, type, sources = []) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'flex gap-3 message-animation';
+            
+            if (type === 'user') {
+                messageDiv.classList.add('justify-end');
+                messageDiv.innerHTML = `
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl rounded-tr-none p-4 max-w-xl">
+                        <p>${escapeHtml(text)}</p>
+                    </div>
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-gray-700 text-sm font-bold">U</span>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-white text-sm font-bold">G</span>
+                    </div>
+                    <div class="bg-gray-100 rounded-2xl rounded-tl-none p-4 max-w-xl">
+                        <div class="text-gray-800 prose prose-sm">${formatMarkdown(text)}</div>
+                        ${sources.length > 0 ? `
+                            <div class="mt-3 pt-3 border-t border-gray-200">
+                                <p class="text-xs font-semibold text-gray-600 mb-2">Sources:</p>
+                                ${sources.map(s => `
+                                    <a href="${s.url}" target="_blank" class="block text-xs text-blue-600 hover:text-blue-800 mb-1">
+                                        📄 ${s.title} (${Math.round(s.relevance * 100)}% relevant)
+                                    </a>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const id = 'typing-' + Date.now();
+            const typingDiv = document.createElement('div');
+            typingDiv.id = id;
+            typingDiv.className = 'flex gap-3';
+            typingDiv.innerHTML = `
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span class="text-white text-sm font-bold">G</span>
+                </div>
+                <div class="bg-gray-100 rounded-2xl rounded-tl-none p-4">
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return id;
+        }
+
+        function removeTypingIndicator(id) {
+            const element = document.getElementById(id);
+            if (element) element.remove();
+        }
+
+        async function handleLogin() {
+            const username = adminUsername.value.trim();
+            const password = adminPassword.value.trim();
+
+            if (!username || !password) {
+                showLoginError('Please enter both username and password');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    authToken = data.token;
+                    localStorage.setItem('giki_admin_token', authToken);
+                    adminModal.classList.add('hidden');
+                    adminBtn.textContent = 'Logout';
+                    adminBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                    adminBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+                    addMessage('Admin mode activated. You can now query student information.', 'bot');
+                    
+                    // Clear form
+                    adminUsername.value = '';
+                    adminPassword.value = '';
+                    loginError.classList.add('hidden');
+                } else {
+                    showLoginError(data.error || 'Login failed');
+                }
+            } catch (error) {
+                showLoginError('Connection error');
+                console.error('Login error:', error);
+            }
+        }
+
+        async function verifyToken() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/verify`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (response.ok) {
+                    adminBtn.textContent = 'Logout';
+                    adminBtn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                    adminBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+                } else {
+                    logout();
+                }
+            } catch (error) {
+                console.error('Token verification error:', error);
+                logout();
+            }
+        }
+
+        function logout() {
+            authToken = null;
+            localStorage.removeItem('giki_admin_token');
+            adminBtn.textContent = 'Admin Login';
+            adminBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+            adminBtn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+            addMessage('Admin mode deactivated.', 'bot');
+        }
+
+        function showLoginError(message) {
+            loginError.textContent = message;
+            loginError.classList.remove('hidden');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatMarkdown(text) {
+            // Simple markdown formatting
+            text = escapeHtml(text);
+            
+            // Bold
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Bullet points
+            text = text.replace(/^[•\-\*]\s(.+)$/gm, '<li>$1</li>');
+            text = text.replace(/(<li>.*<\/li>)/s, '<ul class="list-disc ml-4 space-y-1">$1</ul>');
+            
+            // Line breaks
+            text = text.replace(/\n/g, '<br>');
+            
+            return text;
+        }
+
+        // Auto-focus input on load
+        userInput.focus();
+    </script>
+</body>
+</html>

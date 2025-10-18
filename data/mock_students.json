@@ -1,0 +1,452 @@
+{
+  "2022481": {
+    "name": "Zainab Malik",
+    "department": "Electrical Engineering",
+    "semester": 4,
+    "gpa": 3.99,
+    "attendance": 86.8,
+    "email": "2022481@giki.edu.pk",
+    "status": "Active"
+  },
+  "2024516": {
+    "name": "Ayesha Ali",
+    "department": "Chemical Engineering",
+    "semester": 4,
+    "gpa": 2.73,
+    "attendance": 88.2,
+    "email": "2024516@giki.edu.pk",
+    "status": "Active"
+  },
+  "2024703": {
+    "name": "Hamza Ali",
+    "department": "Chemical Engineering",
+    "semester": 3,
+    "gpa": 3.7,
+    "attendance": 87.7,
+    "email": "2024703@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021995": {
+    "name": "Ali Ahmed",
+    "department": "Materials Engineering",
+    "semester": 3,
+    "gpa": 3.82,
+    "attendance": 80.8,
+    "email": "2021995@giki.edu.pk",
+    "status": "Active"
+  },
+  "2022874": {
+    "name": "Ayesha Khan",
+    "department": "Electrical Engineering",
+    "semester": 4,
+    "gpa": 3.6,
+    "attendance": 87.4,
+    "email": "2022874@giki.edu.pk",
+    "status": "Active"
+  },
+  "2024982": {
+    "name": "Zainab Ahmed",
+    "department": "Mechanical Engineering",
+    "semester": 7,
+    "gpa": 2.51,
+    "attendance": 86.8,
+    "email": "2024982@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021353": {
+    "name": "Bilal Khan",
+    "department": "Mechanical Engineering",
+    "semester": 7,
+    "gpa": 3.23,
+    "attendance": 88.4,
+    "email": "2021353@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023898": {
+    "name": "Fatima Ali",
+    "department": "Mechanical Engineering",
+    "semester": 5,
+    "gpa": 2.54,
+    "attendance": 84.0,
+    "email": "2023898@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021929": {
+    "name": "Maryam Hussain",
+    "department": "Chemical Engineering",
+    "semester": 2,
+    "gpa": 3.42,
+    "attendance": 76.7,
+    "email": "2021929@giki.edu.pk",
+    "status": "Active"
+  },
+  "2024901": {
+    "name": "Bilal Malik",
+    "department": "Computer Science",
+    "semester": 3,
+    "gpa": 3.3,
+    "attendance": 96.0,
+    "email": "2024901@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023955": {
+    "name": "Ahmed Shah",
+    "department": "Mechanical Engineering",
+    "semester": 8,
+    "gpa": 2.8,
+    "attendance": 78.0,
+    "email": "2023955@giki.edu.pk",
+    "status": "Active"
+  },
+  "2024533": {
+    "name": "Ali Khan",
+    "department": "Mechanical Engineering",
+    "semester": 3,
+    "gpa": 3.11,
+    "attendance": 84.7,
+    "email": "2024533@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021445": {
+    "name": "Bilal Hussain",
+    "department": "Computer Science",
+    "semester": 7,
+    "gpa": 3.93,
+    "attendance": 78.0,
+    "email": "2021445@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021676": {
+    "name": "Hamza Khan",
+    "department": "Management Sciences",
+    "semester": 4,
+    "gpa": 3.67,
+    "attendance": 79.1,
+    "email": "2021676@giki.edu.pk",
+    "status": "Active"
+  },
+  "2022620": {
+    "name": "Usman Ahmed",
+    "department": "Materials Engineering",
+    "semester": 2,
+    "gpa": 2.93,
+    "attendance": 87.8,
+    "email": "2022620@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021861": {
+    "name": "Fatima Hussain",
+    "department": "Materials Engineering",
+    "semester": 5,
+    "gpa": 3.13,
+    "attendance": 84.9,
+    "email": "2021861@giki.edu.pk",
+    "status": "Active"
+  },
+  "2024117": {
+    "name": "Fatima Shah",
+    "department": "Computer Science",
+    "semester": 5,
+    "gpa": 3.34,
+    "attendance": 91.6,
+    "email": "2024117@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021592": {
+    "name": "Bilal Khan",
+    "department": "Management Sciences",
+    "semester": 1,
+    "gpa": 3.26,
+    "attendance": 93.7,
+    "email": "2021592@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023969": {
+    "name": "Ahmed Ahmed",
+    "department": "Materials Engineering",
+    "semester": 8,
+    "gpa": 2.74,
+    "attendance": 91.8,
+    "email": "2023969@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023696": {
+    "name": "Fatima Ahmed",
+    "department": "Mechanical Engineering",
+    "semester": 1,
+    "gpa": 3.59,
+    "attendance": 75.0,
+    "email": "2023696@giki.edu.pk",
+    "status": "Active"
+  },
+  "2024956": {
+    "name": "Ali Ahmed",
+    "department": "Electrical Engineering",
+    "semester": 1,
+    "gpa": 2.72,
+    "attendance": 92.4,
+    "email": "2024956@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023805": {
+    "name": "Maryam Shah",
+    "department": "Materials Engineering",
+    "semester": 7,
+    "gpa": 3.57,
+    "attendance": 86.0,
+    "email": "2023805@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023740": {
+    "name": "Hassan Khan",
+    "department": "Mechanical Engineering",
+    "semester": 4,
+    "gpa": 3.29,
+    "attendance": 89.0,
+    "email": "2023740@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021905": {
+    "name": "Hamza Ahmed",
+    "department": "Electrical Engineering",
+    "semester": 1,
+    "gpa": 3.55,
+    "attendance": 82.0,
+    "email": "2021905@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023272": {
+    "name": "Hassan Malik",
+    "department": "Materials Engineering",
+    "semester": 7,
+    "gpa": 3.79,
+    "attendance": 82.5,
+    "email": "2023272@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021762": {
+    "name": "Maryam Hussain",
+    "department": "Management Sciences",
+    "semester": 6,
+    "gpa": 2.98,
+    "attendance": 85.7,
+    "email": "2021762@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021146": {
+    "name": "Hamza Shah",
+    "department": "Electrical Engineering",
+    "semester": 5,
+    "gpa": 2.73,
+    "attendance": 92.1,
+    "email": "2021146@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021193": {
+    "name": "Bilal Khan",
+    "department": "Mechanical Engineering",
+    "semester": 7,
+    "gpa": 3.72,
+    "attendance": 89.8,
+    "email": "2021193@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023264": {
+    "name": "Ayesha Ahmed",
+    "department": "Chemical Engineering",
+    "semester": 5,
+    "gpa": 3.68,
+    "attendance": 84.6,
+    "email": "2023264@giki.edu.pk",
+    "status": "Active"
+  },
+  "2024104": {
+    "name": "Hamza Ahmed",
+    "department": "Materials Engineering",
+    "semester": 2,
+    "gpa": 3.71,
+    "attendance": 91.5,
+    "email": "2024104@giki.edu.pk",
+    "status": "Active"
+  },
+  "2022159": {
+    "name": "Hamza Hussain",
+    "department": "Computer Science",
+    "semester": 2,
+    "gpa": 3.32,
+    "attendance": 85.1,
+    "email": "2022159@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023299": {
+    "name": "Ali Ahmed",
+    "department": "Chemical Engineering",
+    "semester": 3,
+    "gpa": 3.96,
+    "attendance": 75.2,
+    "email": "2023299@giki.edu.pk",
+    "status": "Active"
+  },
+  "2024809": {
+    "name": "Hira Khan",
+    "department": "Chemical Engineering",
+    "semester": 7,
+    "gpa": 3.59,
+    "attendance": 91.2,
+    "email": "2024809@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021460": {
+    "name": "Sara Ali",
+    "department": "Chemical Engineering",
+    "semester": 6,
+    "gpa": 3.38,
+    "attendance": 91.3,
+    "email": "2021460@giki.edu.pk",
+    "status": "Active"
+  },
+  "2022924": {
+    "name": "Usman Shah",
+    "department": "Management Sciences",
+    "semester": 6,
+    "gpa": 3.64,
+    "attendance": 93.8,
+    "email": "2022924@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021504": {
+    "name": "Fatima Ali",
+    "department": "Electrical Engineering",
+    "semester": 5,
+    "gpa": 2.91,
+    "attendance": 79.6,
+    "email": "2021504@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023863": {
+    "name": "Ahmed Shah",
+    "department": "Materials Engineering",
+    "semester": 6,
+    "gpa": 3.67,
+    "attendance": 93.2,
+    "email": "2023863@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021250": {
+    "name": "Hamza Malik",
+    "department": "Mechanical Engineering",
+    "semester": 2,
+    "gpa": 3.35,
+    "attendance": 88.0,
+    "email": "2021250@giki.edu.pk",
+    "status": "Active"
+  },
+  "2022715": {
+    "name": "Fatima Shah",
+    "department": "Electrical Engineering",
+    "semester": 1,
+    "gpa": 2.78,
+    "attendance": 75.0,
+    "email": "2022715@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021464": {
+    "name": "Hassan Malik",
+    "department": "Chemical Engineering",
+    "semester": 7,
+    "gpa": 2.88,
+    "attendance": 80.1,
+    "email": "2021464@giki.edu.pk",
+    "status": "Active"
+  },
+  "2022188": {
+    "name": "Ayesha Khan",
+    "department": "Chemical Engineering",
+    "semester": 6,
+    "gpa": 2.88,
+    "attendance": 83.7,
+    "email": "2022188@giki.edu.pk",
+    "status": "Active"
+  },
+  "2024974": {
+    "name": "Ayesha Khan",
+    "department": "Management Sciences",
+    "semester": 4,
+    "gpa": 2.76,
+    "attendance": 76.3,
+    "email": "2024974@giki.edu.pk",
+    "status": "Active"
+  },
+  "2024507": {
+    "name": "Zainab Malik",
+    "department": "Chemical Engineering",
+    "semester": 6,
+    "gpa": 3.35,
+    "attendance": 80.0,
+    "email": "2024507@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023213": {
+    "name": "Ayesha Ali",
+    "department": "Chemical Engineering",
+    "semester": 2,
+    "gpa": 3.02,
+    "attendance": 75.9,
+    "email": "2023213@giki.edu.pk",
+    "status": "Active"
+  },
+  "2022181": {
+    "name": "Hira Shah",
+    "department": "Mechanical Engineering",
+    "semester": 5,
+    "gpa": 2.83,
+    "attendance": 89.2,
+    "email": "2022181@giki.edu.pk",
+    "status": "Active"
+  },
+  "2022902": {
+    "name": "Sara Hussain",
+    "department": "Mechanical Engineering",
+    "semester": 4,
+    "gpa": 3.71,
+    "attendance": 97.0,
+    "email": "2022902@giki.edu.pk",
+    "status": "Active"
+  },
+  "2021447": {
+    "name": "Ahmed Hussain",
+    "department": "Computer Science",
+    "semester": 4,
+    "gpa": 3.64,
+    "attendance": 90.2,
+    "email": "2021447@giki.edu.pk",
+    "status": "Active"
+  },
+  "2023613": {
+    "name": "Hassan Hussain",
+    "department": "Mechanical Engineering",
+    "semester": 5,
+    "gpa": 2.73,
+    "attendance": 83.5,
+    "email": "2023613@giki.edu.pk",
+    "status": "Active"
+  },
+  "2022396": {
+    "name": "Bilal Khan",
+    "department": "Management Sciences",
+    "semester": 1,
+    "gpa": 3.47,
+    "attendance": 97.5,
+    "email": "2022396@giki.edu.pk",
+    "status": "Active"
+  },
+  "2022673": {
+    "name": "Zainab Hussain",
+    "department": "Electrical Engineering",
+    "semester": 1,
+    "gpa": 3.44,
+    "attendance": 87.7,
+    "email": "2022673@giki.edu.pk",
+    "status": "Active"
+  }
+}

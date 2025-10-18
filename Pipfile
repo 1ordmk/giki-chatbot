@@ -1,0 +1,35 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+selenium = ">=4.10.0"
+beautifulsoup4 = ">=4.12.2"
+scrapy = ">=2.11.0"
+requests = ">=2.31.0"
+pandas = ">=2.0.3"
+numpy = ">=1.25.0"
+chromadb = ">=0.5.3"
+fastapi = ">=0.110.0"
+pydantic = ">=2.4.0"
+uvicorn = ">=0.23.0"
+apscheduler = ">=3.10.1"
+boto3 = ">=1.28.0"
+openai = ">=1.13.3"
+tiktoken = ">=0.7.0"
+python-multipart = ">=0.0.6"
+gunicorn = ">=21.2.0"
+spacy = "*"
+sentence-transformers = "*"
+pinecone-client = "*"
+python-dotenv = "*"
+flask = "*"
+flask-cors = "*"
+scikit-learn = "*"
+umap-learn = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

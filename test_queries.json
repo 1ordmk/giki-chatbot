@@ -1,0 +1,28 @@
+{
+  "general": [
+    "What programs does GIKI offer?",
+    "How do I apply to GIKI?",
+    "What is the fee structure?",
+    "Tell me about campus facilities",
+    "What societies are available?"
+  ],
+  "admissions": [
+    "What is the admission deadline?",
+    "What is the minimum GPA requirement?",
+    "Do I need to give an entrance test?",
+    "Is financial aid available?",
+    "How do I apply for graduate programs?"
+  ],
+  "academic": [
+    "Which department should I choose?",
+    "What is the duration of BS programs?",
+    "Are online courses available?",
+    "What is the grading system?",
+    "Can I do a double major?"
+  ],
+  "admin": [
+    "Get student info for 2022405",
+    "What is the attendance of student 2023101?",
+    "Show me details for student 2021234"
+  ]
+}
