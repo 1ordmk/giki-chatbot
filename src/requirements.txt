@@ -47,3 +47,13 @@ tiktoken>=0.7.0
 # Optional but helpful tools
 python-multipart>=0.0.6
 gunicorn>=21.2.0
+
+# JWT Authentication
+PyJWT>=2.8.0
+
+# Cloud and background tools
+boto3>=1.28.0
+python-multipart>=0.0.6
+
+# Tokenization and context protocol
+tiktoken>=0.7.0
