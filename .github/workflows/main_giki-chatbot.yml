@@ -14,19 +14,32 @@ jobs:
       contents: read
 
     steps:
+      # 1. Checkout your repository
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2. Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      # 3. Create a clean deployment package
+      - name: Create deployment package
         run: |
+          # Create a deployment directory
+          mkdir -p deploy
+          
+          # Copy only necessary files
+          cp -r src deploy/
+          cp requirements.txt deploy/
+          cp .env.example deploy/
+          
+          # Install dependencies to verify (optional)
           python -m pip install --upgrade pip
-          pip install -r src/requirements.txt  # ✅ Already correct!
+          pip install -r requirements.txt
 
+      # 4. Login to Azure
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -34,9 +47,10 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4233E1EE5A4E4F9D9F299BCACFA84245 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_B79820CEDAC0430E85A7E7840E09FA7C }}
 
+      # 5. Deploy to Azure Web App
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'giki-chatbot'
           slot-name: 'Production'
-          package: ./src  # ✅ CHANGE THIS - deploy only src folder
+          package: ./deploy
