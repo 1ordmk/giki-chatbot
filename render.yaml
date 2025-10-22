@@ -1,37 +1,56 @@
+# render.yaml (Save this file in the root of your GitHub repository)
+# This Blueprint defines a Web Service for your GIKI Chatbot backend.
 services:
-  # Backend API
   - type: web
-    name: giki-chatbot
+    name: giki-chatbot-backend
     runtime: python
-    region: oregon  # Free tier region
+    region: oregon 
     plan: free
     branch: main
+    
+    # Assuming 'requirements.txt' is in the root directory.
+    # The 'python -m spacy' command is added to install the required model after pip install.
     buildCommand: |
-      cd src
-      pip install -r ../requirements.txt
+      pip install -r requirements.txt
       python -m spacy download en_core_web_sm
-    startCommand: cd src && gunicorn --bind 0.0.0.0:$PORT --timeout 600 --workers 2 backend:app
+      
+    # CRITICAL FIX: Uses the standard dotted path (src.backend) to find the application 
+    # named 'app' inside 'src/backend.py'.
+    # Gunicorn binds to the port provided by Render and sets a generous timeout for RAG operations.
+    startCommand: gunicorn src.backend:app --bind 0.0.0.0:$PORT --timeout 600 --workers 2
+    
     envVars:
+      # Build-time variable, generally correct
       - key: PYTHON_VERSION
         value: 3.11.0
+      
+      # Secrets (sync: false means you must manually set the value in the Render Dashboard)
       - key: PINECONE_API_KEY
         sync: false
       - key: PINECONE_INDEX_HOST
         sync: false
+      
+      # LLM Configuration: Switched from local Ollama to Groq API
       - key: LLM_PROVIDER
-        value: groq
+        value: groq # Ensure your Python code uses the Groq SDK
       - key: GROQ_API_KEY
-        sync: false
+        sync: false # Must be set in Render UI
+        
+      # Security & Admin Credentials
       - key: SECRET_KEY
-        generateValue: true
+        generateValue: true # Render automatically generates a strong secret
       - key: ADMIN_USERNAME
         value: admin
       - key: ADMIN_PASSWORD
-        value: admin123
+        value: admin123 # NOTE: Change this to a secure password in Render UI immediately
+      
+      # GIKI-specific Parameters
       - key: GIKI_LATITUDE
         value: "33.9407"
       - key: GIKI_LONGITUDE
         value: "72.6267"
+        
+      # External API Keys (Must be set manually in Render UI)
       - key: WEATHER_API_KEY
         sync: false
       - key: EXCHANGE_RATE_API_KEY
