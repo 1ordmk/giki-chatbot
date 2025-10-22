@@ -14,8 +14,21 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from pathlib import Path
 
-load_dotenv()
+# =========================================================================
+# 🎯 CRITICAL FIX: Conditionally load .env for local development only
+# Render injects environment variables directly, so load_dotenv() is not needed
+# and causes errors if the file is missing.
+# =========================================================================
+if os.environ.get('RENDER') != 'true':
+    # This runs ONLY if the RENDER environment variable is NOT set
+    # i.e., when you run the app locally.
+    load_dotenv()
+    logging.info("INFO: Running locally. Loaded variables from .env.")
+else:
+    # This runs when deployed on Render. Variables are already available via os.getenv()
+    logging.info("INFO: Detected Render environment. Skipping local .env file load.")
 
+# The rest of the imports and code remain the same
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import jwt
@@ -147,6 +160,11 @@ Remember: You are a GIKI-specific assistant. Stay focused on GIKI only!"""
 
     def _init_llm(self):
         """Initialize LLM client"""
+        # ⚠️ NOTE: This code is currently configured for Ollama, 
+        # but your render.yaml uses GROQ_API_KEY/LLM_PROVIDER=groq.
+        # This will fail on Render because the code imports 'ollama'. 
+        # You will need to switch this block to use the Groq Python SDK 
+        # (or similar client for a remote LLM) for production deployment.
         try:
             import ollama
             ollama.list()
@@ -311,8 +329,8 @@ Exchange Rate: 1 {data['from_currency']} = {rate:.2f} {data['to_currency']}
         for i, article in enumerate(articles, 1):
             response += f"**{i}. {article['title']}**\n"
             if article['description']:
-                response += f"   {article['description'][:150]}...\n"
-            response += f"   Source: {article['source']} | [Read more]({article['url']})\n\n"
+                response += f"    {article['description'][:150]}...\n"
+            response += f"    Source: {article['source']} | [Read more]({article['url']})\n\n"
         
         return response
     
@@ -771,11 +789,11 @@ if __name__ == '__main__':
     print(f"✓ Student Database: {len(student_db.students)} students loaded")
     print("\n📋 Available MCP Tools:")
     for tool in mcp_server.list_tools():
-        print(f"   • {tool['name']}: {tool['description']}")
+        print(f"    • {tool['name']}: {tool['description']}")
     print("\n🎓 Sample Student IDs:")
     sample_ids = list(student_db.students.keys())[:5]
     for sid in sample_ids:
-        print(f"   • {sid}: {student_db.students[sid]['name']}")
+        print(f"    • {sid}: {student_db.students[sid]['name']}")
     print("="*60 + "\n")
     
     app.run(host='0.0.0.0', port=5005, debug=True)
