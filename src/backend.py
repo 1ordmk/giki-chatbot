@@ -38,7 +38,7 @@ from sentence_transformers import SentenceTransformer
 from pinecone import Pinecone
 
 # Import MCP server
-from mcp_server import mcp_server
+from .mcp_server import mcp_server # <--- FIXED: Uses relative import
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
